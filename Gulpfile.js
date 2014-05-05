@@ -3,8 +3,6 @@ var express = require('express');
 var fs = require('fs');
 var gulp = require('gulp');
 var lr = require('tiny-lr');
-var path = require('path');
-var sequence = require('run-sequence');
 
 var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
@@ -14,9 +12,7 @@ var gzip = require('gulp-gzip');
 var haml = require('gulp-haml');
 var imagemin = require('gulp-imagemin');
 var jshint = require('gulp-jshint');
-var mocha = require('gulp-mocha');
 var refresh = require('gulp-livereload');
-var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var stylus = require('gulp-stylus');
 
@@ -44,70 +40,12 @@ gulp.task('resume', ['compile-resume'], function () {
 
 
 gulp.task('jshint', function() {
-  return gulp.src(['Gulpfile.js', 'spec/**/*.js', 'src/js/**/*.js'])
+  return gulp.src(['Gulpfile.js', 'src/js/**/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('clean', function() {
-  return gulp
-    .src(['out', 'src/js/lib/fs/usr/bin/*'])
-    .pipe(exec('rm -r <%= file.path %>'));
-});
-
-gulp.task('commands', function (cb) {
-  var commands = fs.readdirSync('src/js/lib/commands')
-    .filter(function (f) {
-      return f[0] != '.' && f.substr(-3) == '.js';
-    }).map(function (f) {
-      if (production) {
-        exec('ln -fh ' + __dirname + '/src/js/lib/commands/' + f + ' src/js/lib/fs/usr/bin/' + f.slice(0, -3));
-      }
-
-      return 'require("' + './commands/' + f + '");';
-    });
-
-  fs.writeFileSync('src/js/lib/commands.js', commands.join('\n'));
-
-  cb(null);
-});
-
-gulp.task('file-system', function (cb) {
-  var _fs = {};
-  var _ignore = [
-    '\\.DS_Store',
-    '.*\\.swp'
-  ];
-  var root = 'src/js/lib/fs';
-
-  (function readdir(path, container) {
-    var files = fs.readdirSync(path);
-
-    files.forEach(function (file) {
-      for (var i = 0, l = _ignore.length; i < l; i++) {
-        if (file.match(new RegExp('^' + _ignore[i] + '$'))) {
-          return;
-        }
-      }
-
-      var stat = fs.statSync(path + '/' + file);
-
-      if (stat.isDirectory()) {
-        var f = {};
-        readdir(path + '/' + file, f);
-        container[file] = f;
-      } else {
-        container[file] = fs.readFileSync(path + '/' + file).toString();
-      }
-    });
-  })(root, _fs);
-
-  fs.writeFileSync('src/js/lib/file-system.json', JSON.stringify(_fs, null, 2));
-
-  cb(null);
-});
-
-gulp.task('js', ['jshint', 'commands', 'file-system'], function () {
+gulp.task('js', ['jshint'], function () {
   return gulp.src('src/js/main.js')
     .pipe(browserify({ debug: !production }))
     .pipe(concat('all.js'))
@@ -120,7 +58,7 @@ gulp.task('js', ['jshint', 'commands', 'file-system'], function () {
 
 gulp.task('css', function () {
   return gulp.src('src/css/**/*.styl')
-    .pipe(stylus({ set: production ? ['compress'] : [] }))
+    .pipe(stylus({ set: production ? ['compress', 'include css'] : ['include css'] }))
     .pipe(concat('all.css'))
     .pipe(gulp.dest('out/css'))
     .pipe(gulpif(production, gzip()))
@@ -144,11 +82,7 @@ gulp.task('html', function () {
     .pipe(refresh(server));
 });
 
-gulp.task('build', function (cb) {
-  sequence('clean',
-           ['js', 'css', 'images', 'html', 'resume'],
-           cb);
-});
+gulp.task('build', ['js', 'css', 'images', 'html', 'resume']);
 
 gulp.task('lr-server', function (cb) {
   server.listen(config.lrport, function (err) {
@@ -162,8 +96,8 @@ gulp.task('lr-server', function (cb) {
 
 gulp.task('start-server', ['build', 'lr-server'], function(cb) {
   express()
-    .use(express.static(path.resolve("./out")))
-    .use(express.directory(path.resolve("./out")))
+    .use(express.directory(__dirname + "/out"))
+    .use(express.static(__dirname + "/out"))
     .listen(config.port, function() {
       console.log("Listening on port %s...", config.port);
     });
@@ -181,17 +115,6 @@ gulp.task('watch', ['start-server'], function(cb) {
 });
 
 gulp.task('server', ['watch']);
-
-gulp.task('spec', ['js'], function () {
-  gulp
-    .src('spec/**/*-spec.js')
-    .pipe(mocha());
-});
-
-gulp.task('spec-live', ['spec'], function(){
-  gulp.watch('src/js/**/*.js', ['js', 'spec']);
-  gulp.watch('spec/**/*.js', ['spec']);
-});
 
 gulp.task('create-cname', ['build'], function (cb) {
   fs.writeFileSync('out/CNAME', 'tadeuzagallo.com');

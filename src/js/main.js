@@ -1,12 +1,13 @@
-require('./lib/commands');
-require('./lib/site-helpers');
+//require('./commands');
+require('./site-helpers');
 
-var Terminal = require('./lib/terminal');
-var Tmux = require('./lib/tmux');
-var load = require('./lib/load');
-var tutorial = require('./lib/tutorial');
+var Terminal = require('zsh.js');
+//var Tmux = require('.../lib/tmux');
+var load = require('./load');
+var tutorial = require('./tutorial');
 
 var Programs = (function () {
+  'use strict';
   var programs = {};
   var _container = false;
   var _current = '';
@@ -22,10 +23,6 @@ var Programs = (function () {
 
   function showContainer() {
     container().style.display = 'block';
-  }
-
-  function hideContainer() {
-    container().style.display = 'none';
   }
 
   function find(name) {
@@ -52,7 +49,7 @@ var Programs = (function () {
 
   function callHooks() {
     _hooks.forEach(function (hook) {
-      hook.call && hook.call(undefined);
+      hook.call && hook.call();
     });
   }
 
@@ -104,34 +101,36 @@ var Programs = (function () {
 })();
 
 Programs.before(function () {
+  'use strict';
   Programs.unlock();
 });
 
 Programs.add('terminal', true, (function () {
+  'use strict';
   var _first = true;
 
   return function () {
-    load('terminal.html', function (html) {
-      Programs.show(html);
-      Programs.lock();
-      Terminal.init(document.getElementById('terminal'), document.getElementById('status-bar'));
-      Tmux.init(Terminal);
-      
-      if (_first) {
-        tutorial();
-        _first = false;
-      }
-    });
+    Programs.lock();
+    Terminal.create('container');
+    //Tmux.init(Terminal);
+    
+    if (_first) {
+      tutorial();
+      _first = false;
+    }
   };
 })());
 
 Programs.add('talks', function () {
+  'use strict';
+
   load('talks.html', function (html) {
     Programs.show(html);
   });
 });
 
 Programs.add('resume', function () {
+  'use strict';
   var iframe = document.createElement('iframe');
   iframe.id = 'resume';
   iframe.scrolling = 0;
@@ -144,12 +143,14 @@ Programs.add('resume', function () {
 });
 
 Programs.add('contact', function () {
+  'use strict';
   load('contact.html', function (html) {
     Programs.show(html);
   });
 });
 
-document.addEventListener('DOMContentLoaded', function (e) {
+document.addEventListener('DOMContentLoaded', function () {
+  'use strict';
   Programs.default();
 
   var programs = document.querySelectorAll('#sidebar li');
