@@ -1,5 +1,5 @@
 {
-  "name": "Terminal.js",
+  "name": "tadeuzagallo.com",
   "description": "A web version of my terminal",
   "version": "0.0.1",
   "keywords": [
@@ -9,7 +9,7 @@
   ],
   "homepage": "http://tadeuzagallo.com",
   "bugs": {
-    "url": "https://github.com/tadeuzagallo/Terminal.js/issues",
+    "url": "https://github.com/tadeuzagallo/tadeuzagallo.com/issues",
     "email": "tadeuzagallo@gmail.com"
   },
   "license": "MIT",
@@ -41,6 +41,7 @@
     "type-detect": "~0.1.2"
   },
   "dependencies": {
-    "zsh.js": "^1.0.1"
+    "tmux.js": "0.0.1",
+    "zsh.js": "^2.0.0"
   }
 }
