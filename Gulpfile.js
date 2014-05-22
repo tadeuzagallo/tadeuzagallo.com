@@ -25,16 +25,9 @@ var config = _.extend({
 console.log(config);
 var production = config.env === 'production' || config._.indexOf('deploy') !== -1;
 
-gulp.task('compile-resume', function () {
+gulp.task('resume', function () {
   return gulp
-    .src('src/resume.md')
-    .pipe(exec('./md2resume html <%= file.path %> out/'));
-});
-
-gulp.task('resume', ['compile-resume'], function () {
-  return gulp
-    .src('out/resume.html')
-    .pipe(gulpif(production, gzip()))
+    .src('src/resume.pdf')
     .pipe(gulp.dest('out'));
 });
 

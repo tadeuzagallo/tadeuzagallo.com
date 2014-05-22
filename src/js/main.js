@@ -130,15 +130,8 @@ Programs.add('talks', function () {
 
 Programs.add('resume', function () {
   'use strict';
-  var iframe = document.createElement('iframe');
-  iframe.id = 'resume';
-  iframe.scrolling = 0;
-  iframe.frameborder = 0;
-  iframe.onload = function () {
-    this.style.height = this.contentWindow.document.body.scrollHeight + 'px';
-  };
-  iframe.src = 'resume.html';
-  Programs.show(iframe);
+
+  window.location = '/resume.pdf';
 });
 
 Programs.add('contact', function () {
