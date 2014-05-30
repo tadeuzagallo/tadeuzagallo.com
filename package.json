@@ -21,7 +21,7 @@
   "devDependencies": {
     "browserify": "~3.20.0",
     "express": "~3.4.7",
-    "gulp": "~3.3.2",
+    "gulp": "~3.5.5",
     "gulp-browserify": "~0.2.4",
     "gulp-concat": "~2.1.7",
     "gulp-exec": "^2.0.1",
@@ -41,7 +41,7 @@
     "type-detect": "~0.1.2"
   },
   "dependencies": {
-    "tmux.js": "0.0.1",
-    "zsh.js": "^2.0.0"
+    "zsh.js": "^2.0.2",
+    "tmux.js": "^0.1.0"
   }
 }
