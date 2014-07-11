@@ -41,7 +41,7 @@
     "type-detect": "~0.1.2"
   },
   "dependencies": {
-    "zsh.js": "^2.0.2",
+    "zsh.js": "^2.0.4",
     "tmux.js": "^0.1.0"
   }
 }
