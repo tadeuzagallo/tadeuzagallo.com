@@ -112,7 +112,7 @@ Programs.add('terminal', true, (function () {
     Programs.lock();
     Terminal.create('container');
     Tmux.init(Terminal);
-    
+
     if (_first) {
       tutorial();
       _first = false;
@@ -139,6 +139,11 @@ Programs.add('contact', function () {
   load('contact.html', function (html) {
     Programs.show(html);
   });
+});
+
+Programs.add('blog', function () {
+  'use strict';
+  window.location = '/blog';
 });
 
 document.addEventListener('DOMContentLoaded', function () {

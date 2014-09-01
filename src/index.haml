@@ -9,7 +9,7 @@
     %meta(name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no")
     %meta(rel="apple-touch-icon" href="/images/icon.png")
     %meta(rel="apple-touch-icon-precomposed" href="/images/icon.png")
-    
+
     %meta(prefix="og: http://ogp.me/ns#")
     %meta(property="og:title" content="Tadeu Zagallo | Terminal.js")
     %meta(property="og:description" content="Get to know my work through a web version of my terminal")
@@ -28,20 +28,27 @@
     #fb-root
     #sidebar
       #header
-        %img(src="http://graph.facebook.com/tadeuzagallo/picture" width=30)
+        .run-icon
+          %img(src="http://graph.facebook.com/tadeuzagallo/picture" width=30)
         %span Tadeu Zagallo
       %ul
         %li#run-terminal
-          %img(src="images/icons/terminal.png" width=15)
+          .run-icon
+            %img(src="images/icons/terminal.png" width=24)
           Terminal
-        -#%li#run-talks
-          -#%img(src="images/icons/talks.png" width=15)
-          -#Talks
+
+        %li#run-blog
+          .run-icon
+            %img(src="images/icons/blog.png" width=20)
+          Blog
+
         %li#run-resume
-          %img(src="images/icons/resume.png" width=15)
+          .run-icon
+            %img(src="images/icons/resume.png" width=24)
           Resume
         %li#run-contact
-          %img(src="images/icons/gmail.png" width=15)
+          .run-icon
+            %img(src="images/icons/gmail.png" width=24)
           Contact
       %ul#social-buttons
         %li

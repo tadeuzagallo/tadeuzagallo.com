@@ -1,3 +1,5 @@
+// jshint strict:false
+
 var _ = require('lodash');
 var express = require('express');
 var fs = require('fs');
@@ -75,7 +77,12 @@ gulp.task('html', function () {
     .pipe(refresh(server));
 });
 
-gulp.task('build', ['js', 'css', 'images', 'html', 'resume']);
+gulp.task('build-blog', function () {
+    return gulp.src('src/blog')
+      .pipe(exec('cd <%= file.path %> && jekyll build --destination ../../out/blog'));
+});
+
+gulp.task('build', ['js', 'css', 'images', 'html', 'resume', 'build-blog']);
 
 gulp.task('lr-server', function (cb) {
   server.listen(config.lrport, function (err) {
@@ -89,10 +96,10 @@ gulp.task('lr-server', function (cb) {
 
 gulp.task('start-server', ['build', 'lr-server'], function(cb) {
   express()
-    .use(express.directory(__dirname + "/out"))
-    .use(express.static(__dirname + "/out"))
+    .use(express.directory(__dirname + '/out'))
+    .use(express.static(__dirname + '/out'))
     .listen(config.port, function() {
-      console.log("Listening on port %s...", config.port);
+      console.log('Listening on port %s...', config.port);
     });
 
   cb(null);
