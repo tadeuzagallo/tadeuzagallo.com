@@ -19,10 +19,9 @@
     "url": "tadeuzagallo.com"
   },
   "devDependencies": {
-    "browserify": "~3.20.0",
+    "browserify": "~8.1.0",
     "express": "~3.4.7",
-    "gulp": "~3.5.5",
-    "gulp-browserify": "~0.2.4",
+    "gulp": "^3.8.10",
     "gulp-concat": "~2.1.7",
     "gulp-exec": "^2.0.1",
     "gulp-gzip": "0.0.4",
@@ -38,10 +37,11 @@
     "jshint-stylish": "~0.1.5",
     "lodash": "~2.4.1",
     "tiny-lr": "0.0.5",
-    "type-detect": "~0.1.2"
+    "vinyl-source-stream": "^1.0.0",
+    "watchify": "^2.2.1"
   },
   "dependencies": {
-    "zsh.js": "^2.0.4",
+    "zsh.js": "^2.1.0",
     "tmux.js": "^0.1.0"
   }
 }

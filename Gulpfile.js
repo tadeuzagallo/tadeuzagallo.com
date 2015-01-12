@@ -1,12 +1,13 @@
 // jshint strict:false
 
 var _ = require('lodash');
+var browserify = require('browserify');
 var express = require('express');
 var fs = require('fs');
 var gulp = require('gulp');
 var lr = require('tiny-lr');
+var watchify = require('watchify');
 
-var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
 var exec = require('gulp-exec');
 var gulpif = require('gulp-if');
@@ -17,6 +18,7 @@ var jshint = require('gulp-jshint');
 var refresh = require('gulp-livereload');
 var uglify = require('gulp-uglify');
 var stylus = require('gulp-stylus');
+var source = require('vinyl-source-stream');
 
 var server = lr();
 var config = _.extend({
@@ -24,7 +26,6 @@ var config = _.extend({
   lrport: 35729,
   env: 'development'
 }, gulp.env);
-console.log(config);
 var production = config.env === 'production' || config._.indexOf('deploy') !== -1;
 
 gulp.task('resume', function () {
@@ -40,16 +41,19 @@ gulp.task('jshint', function() {
     .pipe(jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('js', ['jshint'], function () {
-  return gulp.src('src/js/main.js')
-    .pipe(browserify({ debug: !production }))
-    .pipe(concat('all.js'))
+function bundle() {
+  return bundler.bundle()
+    .pipe(source('all.js'))
     .pipe(gulpif(production, uglify()))
     .pipe(gulp.dest('out/js'))
     .pipe(gulpif(production, gzip()))
     .pipe(gulpif(production, gulp.dest('out/js')))
     .pipe(refresh(server));
-});
+}
+
+var bundler = watchify(browserify('./src/js/main.js', watchify.args));
+bundler.on('update', bundle);
+gulp.task('js', ['jshint'], bundle);
 
 gulp.task('css', function () {
   return gulp.src('src/css/**/*.styl')
@@ -77,12 +81,7 @@ gulp.task('html', function () {
     .pipe(refresh(server));
 });
 
-gulp.task('build-blog', function () {
-    return gulp.src('src/blog')
-      .pipe(exec('cd <%= file.path %> && jekyll build --destination ../../out/blog'));
-});
-
-gulp.task('build', ['js', 'css', 'images', 'html', 'resume', 'build-blog']);
+gulp.task('build', ['js', 'css', 'images', 'html', 'resume']);
 
 gulp.task('lr-server', function (cb) {
   server.listen(config.lrport, function (err) {
@@ -106,7 +105,7 @@ gulp.task('start-server', ['build', 'lr-server'], function(cb) {
 });
 
 gulp.task('watch', ['start-server'], function(cb) {
-  gulp.watch(['src/js/**/*.js'], ['js']);
+  //gulp.watch(['src/js/**/*.js'], ['js']);
   gulp.watch('src/css/**/*.styl', ['css']);
   gulp.watch('src/images/**', ['images']);
   gulp.watch('src/**/*.haml', ['html']);
