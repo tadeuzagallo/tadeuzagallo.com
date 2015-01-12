@@ -41,7 +41,7 @@
     "watchify": "^2.2.1"
   },
   "dependencies": {
-    "zsh.js": "^2.1.0",
+    "zsh.js": "^2.2.0",
     "tmux.js": "^0.1.0"
   }
 }

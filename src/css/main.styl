@@ -11,6 +11,10 @@ light_border = #3E4555
 bar-height = 22px
 statusbar-height = 15px
 
+* {
+  box-sizing border-box
+}
+
 body
   position absolute
   left 0
@@ -32,11 +36,14 @@ a
 
 #container {
   position absolute
+
+  top 0
   left 200px
   min-width calc(100% - 200px)
   min-height 100%
-  border-radius 5px
+
   background black
+  border-radius 5px
   box-shadow -1px 0 5px 1px #222C
   color white
 
@@ -72,7 +79,7 @@ a
 
   #header {
     width calc(100% - 15px)
-    height 30px
+    height 60px
     padding 15px
     background-color list_header
     border-bottom 1px solid dark_border
@@ -105,7 +112,7 @@ a
     width 100%
 
     li {
-      height 20px
+      height 34px
       padding 7px
     }
   }
@@ -130,12 +137,53 @@ a
   margin-left 15px
 }
 
-iframe#resume {
-  float left
-  min-width 200px
-  max-width 800px
-  width 90%
-  margin 0 30px
-  border none
+
+#toggle-title,
+#toggle-menu {
+  display none
 }
 
+@media only screen and (max-width: 600px) {
+  #toggle-title {
+    display block
+    position relative
+
+    width 30px
+    height 30px
+    margin-left 5px
+    font-size 2em
+    padding 2px
+    z-index 10
+
+    &::before {
+      content ''
+      position absolute
+
+      left 0
+      top 0.25em
+      width 1em
+      height 0.09em
+      background white
+      box-shadow 0 0.25em 0 0 white,
+        0 0.5em 0 0 white;
+    }
+  }
+
+  #sidebar {
+    padding-top 25px
+  }
+
+  #container {
+    top 25px
+    left 0
+    right 0
+    bottom 0
+    min-height 0
+    height auto !important
+    transition left 200ms ease-in-out
+  }
+
+  #toggle-menu:checked ~ #container {
+    left 200px
+  }
+}
