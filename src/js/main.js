@@ -1,9 +1,8 @@
-require('./site-helpers');
-
 var Terminal = require('zsh.js');
 var Tmux = require('tmux.js');
 var load = require('./load');
 var tutorial = require('./tutorial');
+var helpers = require('./site-helpers');
 
 var Programs = (function () {
   'use strict';
@@ -110,8 +109,9 @@ Programs.add('terminal', true, (function () {
 
   return function () {
     Programs.lock();
-    Terminal.create('container');
-    Tmux.init(Terminal);
+    var terminal = new Terminal('container', null, true);
+    helpers(terminal.CommandManager);
+    Tmux.init(terminal);
 
     if (_first) {
       tutorial();

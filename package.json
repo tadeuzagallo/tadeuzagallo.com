@@ -19,6 +19,7 @@
     "url": "tadeuzagallo.com"
   },
   "devDependencies": {
+    "babelify": "^6.1.1",
     "browserify": "~8.1.0",
     "express": "~3.4.7",
     "gulp": "^3.8.10",
@@ -41,7 +42,7 @@
     "watchify": "^2.2.1"
   },
   "dependencies": {
-    "zsh.js": "^2.2.3",
-    "tmux.js": "^0.2.1"
+    "zsh.js": "tadeuzagallo/zsh.js",
+    "tmux.js": "tadeuzagallo/tmux.js"
   }
 }
