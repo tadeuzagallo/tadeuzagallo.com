@@ -111,7 +111,7 @@ Programs.add('terminal', true, (function () {
     Programs.lock();
     var terminal = new Terminal('container', null, true);
     helpers(terminal.CommandManager);
-    Tmux.init(terminal);
+    new Tmux(terminal);
 
     if (_first) {
       tutorial();
