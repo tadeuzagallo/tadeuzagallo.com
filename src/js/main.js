@@ -114,7 +114,7 @@ Programs.add('terminal', true, (function () {
     new Tmux(terminal);
 
     if (_first) {
-      tutorial();
+      tutorial(terminal);
       _first = false;
     }
   };
