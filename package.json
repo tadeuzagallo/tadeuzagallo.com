@@ -33,7 +33,7 @@
     "gulp-livereload": "~0.2.0",
     "gulp-rename": "~0.2.1",
     "gulp-stylus": "0.0.9",
-    "gulp-uglify": "~0.1.0",
+    "gulp-uglify": "^1.2.0",
     "gulp-watch": "~0.4.1",
     "jshint-stylish": "~0.1.5",
     "lodash": "~2.4.1",

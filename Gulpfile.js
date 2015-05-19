@@ -45,17 +45,21 @@ function bundle() {
   return bundler.bundle()
     .on('error', function (err) { console.log('Error :', err.message, err.stack); })
     .pipe(source('all.js'))
-    .pipe(gulpif(production, uglify()))
-    .pipe(gulp.dest('out/js'))
-    .pipe(gulpif(production, gzip()))
-    .pipe(gulpif(production, gulp.dest('out/js')))
-    .pipe(refresh(server));
+    .pipe(gulp.dest('out/js'));
 }
 
 var bundler = watchify(browserify('./src/js/main.js', watchify.args));
 bundler.on('update', bundle);
 bundler.transform('babelify');
-gulp.task('js', ['jshint'], bundle);
+gulp.task('bundle', bundle);
+gulp.task('js', ['jshint', 'bundle'], function () {
+  return gulp.src('out/js/all.js')
+    .pipe(gulpif(production, uglify()))
+    .pipe(gulpif(production, gulp.dest('out/js')))
+    .pipe(gulpif(production, gzip()))
+    .pipe(gulpif(production, gulp.dest('out/js')))
+    .pipe(refresh(server));
+});
 
 gulp.task('css', function () {
   return gulp.src('src/css/**/*.styl')
