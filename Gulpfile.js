@@ -5,7 +5,6 @@ var browserify = require('browserify');
 var express = require('express');
 var fs = require('fs');
 var gulp = require('gulp');
-var lr = require('tiny-lr');
 var watchify = require('watchify');
 
 var concat = require('gulp-concat');
@@ -15,15 +14,12 @@ var gzip = require('gulp-gzip');
 var haml = require('gulp-haml');
 var imagemin = require('gulp-imagemin');
 var jshint = require('gulp-jshint');
-var refresh = require('gulp-livereload');
 var uglify = require('gulp-uglify');
 var stylus = require('gulp-stylus');
 var source = require('vinyl-source-stream');
 
-var server = lr();
 var config = _.extend({
   port: 8080,
-  lrport: 35729,
   env: 'development'
 }, gulp.env);
 var production = config.env === 'production' || config._.indexOf('deploy') !== -1;
@@ -57,8 +53,7 @@ gulp.task('js', ['jshint', 'bundle'], function () {
     .pipe(gulpif(production, uglify()))
     .pipe(gulpif(production, gulp.dest('out/js')))
     .pipe(gulpif(production, gzip()))
-    .pipe(gulpif(production, gulp.dest('out/js')))
-    .pipe(refresh(server));
+    .pipe(gulp.dest('out/js'));
 });
 
 gulp.task('css', function () {
@@ -67,15 +62,13 @@ gulp.task('css', function () {
     .pipe(concat('all.css'))
     .pipe(gulp.dest('out/css'))
     .pipe(gulpif(production, gzip()))
-    .pipe(gulp.dest('out/css'))
-    .pipe(refresh(server));
+    .pipe(gulp.dest('out/css'));
 });
 
 gulp.task('images', function () {
   return gulp.src('src/images/**')
     .pipe(gulpif(production, imagemin()))
-    .pipe(gulp.dest('out/images'))
-    .pipe(refresh(server));
+    .pipe(gulp.dest('out/images'));
 });
 
 gulp.task('html', function () {
@@ -83,23 +76,12 @@ gulp.task('html', function () {
     .pipe(haml({ optimize: production }))
     .pipe(gulp.dest('out'))
     .pipe(gulpif(production, gzip()))
-    .pipe(gulp.dest('out'))
-    .pipe(refresh(server));
+    .pipe(gulp.dest('out'));
 });
 
 gulp.task('build', ['js', 'css', 'images', 'html', 'resume']);
 
-gulp.task('lr-server', function (cb) {
-  server.listen(config.lrport, function (err) {
-    if (err) {
-      console.log(err);
-    }
-  });
-
-  cb(null);
-});
-
-gulp.task('start-server', ['build', 'lr-server'], function(cb) {
+gulp.task('start-server', ['build'], function(cb) {
   express()
     .use(express.directory(__dirname + '/out'))
     .use(express.static(__dirname + '/out'))
