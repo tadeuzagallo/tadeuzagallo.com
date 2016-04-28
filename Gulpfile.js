@@ -40,7 +40,7 @@ gulp.task('jshint', function() {
 function bundle() {
   return bundler.bundle()
     .on('error', function (err) { console.log('Error :', err.message, err.stack); })
-    .pipe(source('all.js'))
+    .pipe(source('site.js'))
     .pipe(gulp.dest('out/js'));
 }
 
@@ -49,7 +49,7 @@ bundler.on('update', bundle);
 bundler.transform('babelify');
 gulp.task('bundle', bundle);
 gulp.task('js', ['jshint', 'bundle'], function () {
-  return gulp.src('out/js/all.js')
+  return gulp.src('out/js/site.js')
     .pipe(gulpif(production, uglify()))
     .pipe(gulpif(production, gulp.dest('out/js')))
     .pipe(gulpif(production, gzip()))
@@ -59,7 +59,7 @@ gulp.task('js', ['jshint', 'bundle'], function () {
 gulp.task('css', function () {
   return gulp.src('src/css/**/*.styl')
     .pipe(stylus({ set: production ? ['compress', 'include css'] : ['include css'] }))
-    .pipe(concat('all.css'))
+    .pipe(concat('site.css'))
     .pipe(gulp.dest('out/css'))
     .pipe(gulpif(production, gzip()))
     .pipe(gulp.dest('out/css'));
