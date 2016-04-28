@@ -1,4 +1,4 @@
-import Stream from 'zsh.js/lib/stream';
+import Stream from 'zsh.js/stream';
 
 export default (terminal) => {
   var p = function () {};

@@ -44,12 +44,24 @@ function bundle() {
     .pipe(gulp.dest('out/js'));
 }
 
-var bundler = watchify(browserify('./src/js/main.js', watchify.args));
+var bundler = watchify(browserify('./src/js/main.js', Object.assign(watchify.args, {
+  bundleExternal: false
+})));
+
+bundler.on('prebundle', (bundle) => {
+  bundle.external('./zsh.js');
+  bundle.external('./tmux.js');
+});
+
 bundler.on('update', bundle);
 bundler.transform('babelify');
 gulp.task('bundle', bundle);
-gulp.task('js', ['jshint', 'bundle'], function () {
-  return gulp.src('out/js/site.js')
+gulp.task('js', [/*'jshint',*/ 'bundle'], function () {
+  return gulp.src([
+      'out/js/site.js',
+      'node_modules/zsh.js/dist/zsh.js',
+      'node_modules/tmux.js/dist/tmux.js',
+    ])
     .pipe(gulpif(production, uglify()))
     .pipe(gulpif(production, gulp.dest('out/js')))
     .pipe(gulpif(production, gzip()))

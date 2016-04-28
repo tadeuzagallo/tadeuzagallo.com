@@ -1,4 +1,5 @@
 var Terminal = require('zsh.js');
+var CommandManager = require('zsh.js/command-manager');
 var Tmux = require('tmux.js');
 var load = require('./load');
 var tutorial = require('./tutorial');
@@ -110,7 +111,7 @@ Programs.add('terminal', true, (function () {
   return function () {
     Programs.lock();
     var terminal = new Terminal('container', null, true);
-    helpers(terminal.CommandManager);
+    helpers(CommandManager);
     new Tmux(terminal);
 
     if (_first) {
