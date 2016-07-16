@@ -1,10 +1,13 @@
 // jshint strict:false
 
 var _ = require('lodash');
+var babelify = require('babelify');
 var browserify = require('browserify');
 var express = require('express');
 var fs = require('fs');
 var gulp = require('gulp');
+var serveStatic = require('serve-static');
+var serveIndex = require('serve-index');
 var watchify = require('watchify');
 
 var concat = require('gulp-concat');
@@ -54,7 +57,9 @@ bundler.on('prebundle', (bundle) => {
 });
 
 bundler.on('update', bundle);
-bundler.transform('babelify');
+bundler.transform(babelify.configure({
+  presets: ['es2015'],
+}));
 gulp.task('bundle', bundle);
 gulp.task('js', [/*'jshint',*/ 'bundle'], function () {
   return gulp.src([
@@ -70,7 +75,7 @@ gulp.task('js', [/*'jshint',*/ 'bundle'], function () {
 
 gulp.task('css', function () {
   return gulp.src('src/css/**/*.styl')
-    .pipe(stylus({ set: production ? ['compress', 'include css'] : ['include css'] }))
+    .pipe(stylus({ compress: production, 'include css': true }))
     .pipe(concat('site.css'))
     .pipe(gulp.dest('out/css'))
     .pipe(gulpif(production, gzip()))
@@ -95,8 +100,8 @@ gulp.task('build', ['js', 'css', 'images', 'html', 'resume']);
 
 gulp.task('start-server', ['build'], function(cb) {
   express()
-    .use(express.directory(__dirname + '/out'))
-    .use(express.static(__dirname + '/out'))
+    .use(serveIndex(__dirname + '/out'))
+    .use(serveStatic(__dirname + '/out'))
     .listen(config.port, function() {
       console.log('Listening on port %s...', config.port);
     });

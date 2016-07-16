@@ -1,9 +1,9 @@
-var Terminal = require('zsh.js');
-var CommandManager = require('zsh.js/command-manager');
-var Tmux = require('tmux.js');
-var load = require('./load');
-var tutorial = require('./tutorial');
-var helpers = require('./site-helpers');
+import Terminal from 'zsh.js';
+import CommandManager from 'zsh.js/command-manager';
+import Tmux from 'tmux.js';
+import load from './load';
+import tutorial from './tutorial';
+import helpers from './site-helpers';
 
 var Programs = (function () {
   'use strict';
