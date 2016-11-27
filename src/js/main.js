@@ -129,19 +129,6 @@ Programs.add('talks', function () {
   });
 });
 
-Programs.add('resume', function () {
-  'use strict';
-
-  window.location = '/resume.pdf';
-});
-
-Programs.add('contact', function () {
-  'use strict';
-  load('contact.html', function (html) {
-    Programs.show(html);
-  });
-});
-
 Programs.add('blog', function () {
   'use strict';
   window.location = '/blog';
