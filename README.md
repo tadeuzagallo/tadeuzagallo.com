@@ -1,5 +1,3 @@
-# tadeuzagallo.com #
+The legacy homepage of my website. It can now be seen at https://tadeuzagallo.com/zsh.hs
 
-My website stuff that will be compiled, deployed and hosted on github: [https://github.com/tadeuzagallo/tadeuzagallo.github.io](https://github.com/tadeuzagallo/tadeuzagallo.github.io)
-
-It uses [zsh.js](https://github.com/tadeuzagallo/zsh.js) and [tmux.js](https://github.com/tadeuzagallo/zsh.js)
+It simply adds some personal information and custom commands on top of [zsh.js](https://github.com/tadeuzagallo/zsh.js) and [tmux.js](https://github.com/tadeuzagallo/zsh.js)
